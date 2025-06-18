@@ -8,8 +8,11 @@ export const updateContactById = async (id, payload, options = {}) => {
     includeResultMetadata: true,
     ...options,
   });
-  if (!result) return null;
-  const isNew = result?.lastErrorObject?.upserted;
+
+  if (!result || !result.value) return null;
+
+  const isNew = Boolean(result?.lastErrorObject?.upserted);
+
   return {
     isNew,
     data: result?.value,
