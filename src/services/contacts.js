@@ -4,7 +4,6 @@ export const getContactById = (id) => Contact.findById(id);
 export const addContact = (payload) => Contact.create(payload);
 export const updateContactById = async (id, payload, options = {}) => {
   const result = await Contact.findByIdAndUpdate(id, payload, {
-    new: true,
     includeResultMetadata: true,
     ...options,
   });
