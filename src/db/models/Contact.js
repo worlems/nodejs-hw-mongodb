@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { saveErrorHandler, setUpdateSettings } from './hooks.js';
 
 const contactSchema = new Schema(
   {
@@ -24,11 +25,21 @@ const contactSchema = new Schema(
       default: 'personal',
     },
   },
-  {
-    timestamps: true,
-  },
+  { versionKey: false, timestamps: true },
 );
-
+contactSchema.post('save', saveErrorHandler);
+contactSchema.post('findOneAndUpdate', setUpdateSettings);
+contactSchema.post('findOneAndUpdate', saveErrorHandler);
+export const contactSortFields = [
+  '_id',
+  'name',
+  'phoneNumber',
+  'email',
+  'isFavourite',
+  'contactType',
+  'createdAt',
+  'updatedAt',
+];
 const Contact = model('Contact', contactSchema);
 
 export default Contact;
