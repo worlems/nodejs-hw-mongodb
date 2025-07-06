@@ -67,3 +67,12 @@ export const refreshUser = async ({ refreshToken, sessionId }) => {
 };
 
 export const logoutUser = (_id) => SessionCollection.findOneAndDelete({ _id });
+
+export const getUserByEmail = async (email) => {
+  return UserCollection.findOne({ email });
+};
+
+export const updatePassword = async (userId, newPassword) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  return UserCollection.findByIdAndUpdate(userId, { password: hashedPassword });
+};
