@@ -7,6 +7,8 @@ import {
   accessTokenLifetime,
   refreshTokenLifetime,
 } from '../constants/auth-constans.js';
+import jwt from 'jsonwebtoken';
+import { getEnvVar } from '../utils/getEnvVar.js';
 
 const createSession = () => ({
   accessToken: randomBytes(30).toString('base64'),
@@ -72,7 +74,25 @@ export const getUserByEmail = async (email) => {
   return UserCollection.findOne({ email });
 };
 
-export const updatePassword = async (userId, newPassword) => {
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-  return UserCollection.findByIdAndUpdate(userId, { password: hashedPassword });
+export const resetPassword = async (payload) => {
+  let entries;
+  try {
+    entries = jwt.verify(payload.token, getEnvVar('JWT_SECRET'));
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
+  const user = await UserCollection.findOne({
+    email: entries.email,
+    _id: entries.sub,
+  });
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
+  const encryptedPassword = await bcrypt.hash(payload.password, 10);
+  await UserCollection.updateOne(
+    { _id: user._id },
+    { password: encryptedPassword },
+  );
+  await SessionCollection.deleteOne({ userId: user._id });
 };

@@ -4,7 +4,7 @@ import {
   refreshUser,
   logoutUser,
   getUserByEmail,
-  updatePassword,
+  resetPassword,
 } from '../services/auth.js';
 
 import { refreshTokenLifetime } from '../constants/auth-constans.js';
@@ -77,7 +77,9 @@ export const sendResetEmailController = async (req, res) => {
     throw createHttpError(404, 'User not found!');
   }
 
-  const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '5m' });
+  const token = jwt.sign({ email, sub: user._id.toString() }, JWT_SECRET, {
+    expiresIn: '5m',
+  });
   const resetLink = `${APP_DOMAIN}/reset-password?token=${token}`;
 
   try {
@@ -102,27 +104,37 @@ export const sendResetEmailController = async (req, res) => {
   }
 };
 
+// export const resetPasswordController = async (req, res, next) => {
+//   const { token, password } = req.body;
+
+//   let email;
+
+//   try {
+//     const decoded = jwt.verify(token, JWT_SECRET);
+//     email = decoded.email;
+
+//     const user = await getUserByEmail(email);
+//     if (!user) {
+//       throw createHttpError(404, 'User not found!');
+//     }
+
+//     await updatePassword(user._id, password);
+
+//     res.status(200).json({
+//       status: 200,
+//       message: 'Password has been successfully reset.',
+//       data: {},
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 export const resetPasswordController = async (req, res) => {
-  const { token, password } = req.body;
-
-  let email;
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    email = decoded.email;
-  } catch (err) {
-    throw createHttpError(401, 'Token is expired or invalid.');
-  }
-
-  const user = await getUserByEmail(email);
-  if (!user) {
-    throw createHttpError(404, 'User not found!');
-  }
-
-  await updatePassword(user._id, password);
-
+  await resetPassword(req.body);
   res.status(200).json({
     status: 200,
-    message: 'Password has been successfully reset.',
+    message: 'Password has been successfully reset!',
     data: {},
   });
 };
