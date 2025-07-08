@@ -104,32 +104,6 @@ export const sendResetEmailController = async (req, res) => {
   }
 };
 
-// export const resetPasswordController = async (req, res, next) => {
-//   const { token, password } = req.body;
-
-//   let email;
-
-//   try {
-//     const decoded = jwt.verify(token, JWT_SECRET);
-//     email = decoded.email;
-
-//     const user = await getUserByEmail(email);
-//     if (!user) {
-//       throw createHttpError(404, 'User not found!');
-//     }
-
-//     await updatePassword(user._id, password);
-
-//     res.status(200).json({
-//       status: 200,
-//       message: 'Password has been successfully reset.',
-//       data: {},
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 export const resetPasswordController = async (req, res) => {
   await resetPassword(req.body);
   res.status(200).json({
