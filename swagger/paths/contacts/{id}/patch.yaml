@@ -1,0 +1,81 @@
+tags:
+  - Contacts
+summary: Update a contact by id
+operationId: updateContact
+description: 'Update fields of a contact by contact ID'
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: id
+    required: true
+    schema:
+      type: string
+    description: Contact ID to update
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+            example: 'John Doe Updated'
+            description: "Contact's name"
+          phoneNumber:
+            type: string
+            example: '380987303435'
+            description: "Contact's phone number"
+          contactType:
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: 'personal'
+            description: "Contact's type"
+          email:
+            type: string
+            example: 'john.doe@example.com'
+            description: "Contact's email"
+          isFavourite:
+            type: boolean
+            example: true
+            description: 'Is contact a favorite'
+          photo:
+            type: string
+            format: binary
+            description: "Contact's photo"
+responses:
+  '200':
+    description: Contact updated successfully
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Contact updated successfully!
+            data:
+              $ref: '../../../components/schemas/contact.yaml'
+  '401':
+    $ref: '../../../components/responses/401.yaml'
+  '404':
+    description: Contact not found
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Contact not found
