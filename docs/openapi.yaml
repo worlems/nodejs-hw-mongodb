@@ -42,8 +42,10 @@ tags:
     description: Operations related to authentication.
 
 servers:
-  - url: http://localhost:3000
   - url: https://nodejs-hw-mongodb-5yys.onrender.com
+    description: Production server (Render)
+  - url: http://localhost:3000
+    description: Local development server
 
 paths:
   /contacts:
