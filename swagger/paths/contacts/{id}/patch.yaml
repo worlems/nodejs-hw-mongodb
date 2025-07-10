@@ -20,25 +20,28 @@ requestBody:
         type: object
         properties:
           name:
+            description: "Contact's name"
             type: string
             example: 'John Doe'
           phoneNumber:
+            description: "Contact's phone number"
             type: string
-            example: '+380987380000'
+            example: '380987303435'
+          contactType:
+            description: "Contact's type"
+            type: string
+            enum: ['work', 'home', 'personal']
+            example: personal
           email:
+            description: "Contact's email"
             type: string
-            example: 'VictoriaSonina@gmail.com'
+            example: 'john.doe@example.com'
           isFavourite:
+            description: 'Is this contact a favorite'
             type: boolean
             example: true
-          contactType:
-            type: string
-            enum:
-              - personal
-              - work
-              - family
-            example: 'personal'
           photo:
+            description: "Contact's photo"
             type: string
             format: binary
 responses:
