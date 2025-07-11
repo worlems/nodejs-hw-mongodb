@@ -298,7 +298,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "contactId",
+            "name": "id",
             "required": true,
             "schema": {
               "type": "string",
@@ -375,31 +375,37 @@
                 "type": "object",
                 "properties": {
                   "name": {
+                    "description": "Contact's name",
                     "type": "string",
                     "example": "John Doe"
                   },
                   "phoneNumber": {
+                    "description": "Contact's phone number",
                     "type": "string",
-                    "example": "+380987380000"
-                  },
-                  "email": {
-                    "type": "string",
-                    "example": "VictoriaSonina@gmail.com"
-                  },
-                  "isFavourite": {
-                    "type": "boolean",
-                    "example": true
+                    "example": "380987303435"
                   },
                   "contactType": {
+                    "description": "Contact's type",
                     "type": "string",
                     "enum": [
-                      "personal",
                       "work",
-                      "family"
+                      "home",
+                      "personal"
                     ],
                     "example": "personal"
                   },
+                  "email": {
+                    "description": "Contact's email",
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  },
+                  "isFavourite": {
+                    "description": "Is this contact a favorite",
+                    "type": "boolean",
+                    "example": true
+                  },
                   "photo": {
+                    "description": "Contact's photo",
                     "type": "string",
                     "format": "binary"
                   }
